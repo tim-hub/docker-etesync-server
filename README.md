@@ -13,9 +13,11 @@ This build follows some tags of the Python official docker images:
 ## Usage
 
 ### docker
+
 ```bash
 docker run  -d -e SUPER_USER=admin -e SUPER_PASS=changeme -p 80:3735 -v /path/on/host:/data grburst/etesync:alpine
 ```
+
 
 Create a container running ETESync usiong http protocol.
 
@@ -43,6 +45,7 @@ volumes:
   data-etesync:
 ```
 
+
 ### Volumes
 
 `/data`: database file location
@@ -54,29 +57,29 @@ This image exposes the **3735** TCP Port
 ### Environment Variables
 
 - **SERVER**: Defines how the container will serve the application, the options are:
-  - `http` Runs using HTTP protocol, this is the default mode.
+  - `http` Runs using HTTP protocol, this is the *default* mode.
   - `https` same as above but with TLS/SSL support, see below how to use with your own certificates.
   - `uwsgi` start using uWSGI native protocol, for reverse-proxies/load balances, such as _nginx_, that support this protocol
   - `http-socket` Similar to the first option, but without uWSGI HTTP router/proxy/load-balancer, this recommended for any reverse-proxies/load balances, that support HTTP protocol, like _traefik_
   - `django-server` this mode uses the embedded django http server, `./manage.py runserver :3735`, this is not recommeded but can be useful for debugging
 - **SUPER_USER** and **SUPER_PASS**: Username and password of the django superuser (only used if no previous database is found, both must be used together);
 - **SUPER_EMAIL**: Email of the django superuser (optional, only used if no database is found);
-- **PUID** and **PGID**: set user and group when running using uwsgi, default: `1000`;
-- **ETESYNC_DB_PATH**: Location of the ETESync SQLite database. default: `/data` volume;
+- **PUID** and **PGID**: set user and group when running using uwsgi, *default*: `1000`;
+- **ETESYNC_DB_PATH**: Location of the ETESync SQLite database. *default*: `/data` volume;
 - **DEBUG**: Show debug information in the web interface. *default*: "False"
 
 ## Settings and Customization
 
-Custom settings can be added to `/etesync/etesync_site_settings.py`, this file overrides the default `settings.py`, mostly for _Django: The Web framework_ options, this image uses the variables below to set some of these options.
+Custom settings can be added to `/etesync/etesync_site_settings.py`, this file overrides the *default* `settings.py`, mostly for _Django: The Web framework_ options, this image uses the variables below to set some of these options.
 
 ### _Environment Variables on `/etesync/etesync_site_settings.py`_
 
-- **ALLOWED_HOSTS**:  the ALLOWED_HOSTS settings, must be valid domains separated by `,`. default: `*` (not recommended for production);
-- **DEBUG**: enables Django Debug mode, not recommended for production defaults to False;
-- **LANGUAGE_CODE**: Django language code, default: `en-us`;
-- **SECRET_FILE**: Defines file that contains the value for django's `SECRET_KEY` if not found a new one is generated. default: `/etesync/secret.txt`.
-- **USE_TZ**: Force Django to use time-zone-aware datetime objects internally, defaults to `false`;
-- **TIME_ZONE**: time zone, defaults to `UTC`;
+- **ALLOWED_HOSTS**:  the ALLOWED_HOSTS settings, must be valid domains separated by `,`. *default*: `*` (not recommended for production);
+- **DEBUG**: enables Django Debug mode, not recommended for production *defaults* to False;
+- **LANGUAGE_CODE**: Django language code, *default*: `en-us`;
+- **SECRET_FILE**: Defines file that contains the value for django's `SECRET_KEY` if not found a new one is generated. *default*: `/etesync/secret.txt`.
+- **USE_TZ**: Force Django to use time-zone-aware datetime objects internally, *defaults* to `false`;
+- **TIME_ZONE**: time zone, *defaults* to `UTC`;
 
 ### _Using uWSGI with HTTPS_
 
@@ -88,6 +91,28 @@ By default ETESync will look for the files `/certs/crt.pem` and `/certs/key.pem`
 
 When behind a reverse-proxy/http server compatible `uwsgi` protocol the static files are located at `/var/www/etesync/static`, files will be copied if missing on start.
 
+### _Build Variables_
+Customize your build. Either when building directly with `docker build`:
+
+```bash
+# Build default image
+docker build -t [myetesync] -f ./tags/[alpine|latest|slim]/Dockerfile .
+
+# Build with args
+docker build --build-arg VAR_NAME=value (...)
+```
+
+
+or adding the following in a `docker-compose` file:
+
+```Dockerfile
+services:
+  etesync:
+    build:
+      context: ./build
+      args:
+        VAR_NAME: value
+```
 ## Examples
 
 ### nginx reverse proxy
@@ -95,12 +120,15 @@ When behind a reverse-proxy/http server compatible `uwsgi` protocol the static f
 In many cases, you run it several docker images behind a reverse proxy. Here is how I use it:
 
 Create a `docker network` to let services from different compose files communicate
+
 ```bash
 docker network create my-reverse-proxy
-
+build: build
 ```
 
+
 Nginx `docker-compose` file:
+
 ```Dockerfile
 version: '3.7'
 
@@ -127,7 +155,9 @@ networks:
     name: my-reverse-proxy
 ```
 
+
 ... and the etesync `docker-compose` file:
+
 ```Dockerfile
 version: '3'
 
