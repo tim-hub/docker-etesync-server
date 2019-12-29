@@ -155,7 +155,14 @@ networks:
     external: true
 ```
 
-In the nginx configuration, you need something like this:
+
+In the nginx configuration, you need to an appropriate `*_pass` to your etesync instance, e.g. a `uwsgi_pass`.
+Notes:
+    1. You can use the hostname `etesync` in the `uwsgi_pass` since they are sharing a network
+    2. In the example, `https_server.include` is a file providing my default https settings for nginx
+
+It will look similar like the following:
+
 ```nginx
 server {
     server_name etesync.example.com;
