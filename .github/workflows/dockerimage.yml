@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: victorrds/etesync:alpine
+    runs-on: python:alpine
     steps:
       - name: Check out code into module directory
         uses: actions/checkout@v1
