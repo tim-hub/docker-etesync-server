@@ -8,16 +8,13 @@ on:
     types: [published]
 
 jobs:
-
   build:
-
     runs-on: victorrds/etesync:alpine
-
     steps:
-      - uses: actions/checkout@v1
-      # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Check out code into module directory
+        uses: actions/checkout@v1
       - name: Build + Publish Docker image
-      - uses: elgohr/Publish-Docker-Github-Action@2.11
+        uses: elgohr/Publish-Docker-Github-Action@2.11
         with:
           name: GRBurst/etesync
           username: ${{ secrets.DOCKER_USERNAME }}
