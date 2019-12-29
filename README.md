@@ -12,9 +12,35 @@ This build follows some tags of the Python official docker images:
 
 ## Usage
 
-```docker run  -d -e SUPER_USER=admin -e SUPER_PASS=changeme -p 80:3735 -v /path/on/host:/data grburst/etesync```
+```bash
+docker run  -d -e SUPER_USER=admin -e SUPER_PASS=changeme -p 80:3735 -v /path/on/host:/data grburst/etesync:alpine
+```
 
 Create a container running ETESync usiong http protocol.
+
+## docker-compose
+You can use docker-compose file, here is an example:
+
+```Dockerfile
+version: '3'
+
+services:
+  etesync:
+    container_name: etesync
+    image: grburst/etesync:alpine
+    restart: always
+    port:
+      - 80:3735
+    volumes:
+      - data-etesync:/data
+    environment:
+      SERVER: ${SERVER:-uwsgi}
+      SUPER_USER: ${SUPER_USER:-admin}
+      SUPER_PASS: ${SUPER_PASS:-admin}
+
+volumes:
+  data-etesync:
+```
 
 ## Volumes
 
