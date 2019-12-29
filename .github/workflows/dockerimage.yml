@@ -13,6 +13,14 @@ jobs:
     steps:
       - name: Check out code into module directory
         uses: actions/checkout@v1
+      - name: Docker Hub README & description sync
+        uses: meeDamian/sync-readme@v1.0.6
+        with:
+          user: ${{ secrets.DOCKER_USERNAME }}
+          pass: ${{ secrets.DOCKER_PASSWORD }}
+          slug: grburst/etesync
+          readme: true
+          description: true
       - name: Build + Publish Docker image
         uses: elgohr/Publish-Docker-Github-Action@2.11
         with:
