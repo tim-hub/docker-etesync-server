@@ -67,6 +67,8 @@ This image exposes the **3735** TCP Port
 - **PUID** and **PGID**: set user and group when running using uwsgi, *default*: `1000`;
 - **ETESYNC_DB_PATH**: Location of the ETESync SQLite database. *default*: `/data` volume;
 - **DEBUG**: Show debug information in the web interface. *default*: "False"
+- **SECRET_KEY**: Provide the value for django's `SECRET_KEY`. When provided, it will be written to `SECRET_FILE` on first startup, otherwise etesync will generate a random key for you.
+
 
 ## Settings and Customization
 
@@ -113,6 +115,7 @@ services:
       args:
         VAR_NAME: value
 ```
+
 ## Examples
 
 ### nginx reverse proxy
