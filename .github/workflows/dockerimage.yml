@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: python:alpine
+    runs-on: ubuntu-latest
     steps:
       - name: Check out code into module directory
         uses: actions/checkout@v1
