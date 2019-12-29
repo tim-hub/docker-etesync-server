@@ -12,13 +12,14 @@ This build follows some tags of the Python official docker images:
 
 ## Usage
 
+### docker
 ```bash
 docker run  -d -e SUPER_USER=admin -e SUPER_PASS=changeme -p 80:3735 -v /path/on/host:/data grburst/etesync:alpine
 ```
 
 Create a container running ETESync usiong http protocol.
 
-## docker-compose
+### docker-compose
 You can use docker-compose file, here is an example:
 
 ```Dockerfile
@@ -42,43 +43,15 @@ volumes:
   data-etesync:
 ```
 
-In many cases, you run it several docker images behind a reverse proxy. Here is how I use it:
-```Dockerfile
-version: '3'
-
-services:
-  etesync:
-    container_name: etesync
-    image: grburst/etesync:alpine
-    restart: always
-    networks:
-      - my-reverse-proxy
-    expose:
-      - "3735"
-    volumes:
-      - data-etesync:/data
-    environment:
-      SERVER: ${SERVER:-uwsgi}
-      SUPER_USER: ${SUPER_USER:-admin}
-      SUPER_PASS: ${SUPER_PASS:-admin}
-
-volumes:
-  data-etesync:
-
-networks:
-  my-reverse-proxy:
-    external: true
-```
-
-## Volumes
+### Volumes
 
 `/data`: database file location
 
-## Ports
+### Ports
 
 This image exposes the **3735** TCP Port
 
-## Environment Variables
+### Environment Variables
 
 - **SERVER**: Defines how the container will serve the application, the options are:
   - `http` Runs using HTTP protocol, this is the default mode.
@@ -113,3 +86,85 @@ By default ETESync will look for the files `/certs/crt.pem` and `/certs/key.pem`
 ### _Serving Static Files_
 
 When behind a reverse-proxy/http server compatible `uwsgi` protocol the static files are located at `/var/www/etesync/static`, files will be copied if missing on start.
+
+## Examples
+
+### nginx reverse proxy
+
+In many cases, you run it several docker images behind a reverse proxy. Here is how I use it:
+
+Create a `docker network` to let services from different compose files communicate
+```bash
+docker network create my-reverse-proxy
+
+```
+
+Nginx `docker-compose` file:
+```Dockerfile
+version: '3.7'
+
+services:
+  nginx:
+    container_name: nginx
+    build: build
+    restart: on-failure
+    networks:
+      - my-reverse-proxy
+      - default
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ${TLS_CERTS_DIR:-./.test_certs}:/tls_certs/:ro
+      - auth-nginx:/auth/
+
+volumes:
+  auth-nginx:
+
+networks:
+  reverse-proxy:
+    name: my-reverse-proxy
+```
+
+... and the etesync `docker-compose` file:
+```Dockerfile
+version: '3'
+
+services:
+  etesync:
+    container_name: etesync
+    image: grburst/etesync:alpine
+    restart: always
+    networks:
+      - my-reverse-proxy
+    expose:
+      - "3735"
+    volumes:
+      - data-etesync:/data
+    environment:
+      SERVER: ${SERVER:-uwsgi}
+      SUPER_USER: ${SUPER_USER:-admin}
+      SUPER_PASS: ${SUPER_PASS:-admin}
+
+volumes:
+  data-etesync:
+
+networks:
+  my-reverse-proxy:
+    external: true
+```
+
+In the nginx configuration, you need something like this:
+```nginx
+server {
+    server_name etesync.example.com;
+    include conf.d/common/https_server.include;
+    client_max_body_size       10m;
+    client_body_buffer_size    128k;
+
+    location / {
+        include     uwsgi_params;
+        uwsgi_pass  etesync:3735;
+    }
+}
+```
