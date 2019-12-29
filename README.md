@@ -7,8 +7,8 @@ Docker image for [ETESync](https://www.etesync.com/) based on the [server-skelet
 This build follows some tags of the Python official docker images:
 
 - `edge` [(master:tags/latest/Dockerfile)](https://github.com/grburst/docker-etesync-server/blob/master/tags/latest/Dockerfile)
-- `slim`  [(master:tags/slim/Dockerfile)](https://github.com/grburst/docker-etesync-server/blob/stable/tags/slim/Dockerfile)
-- `alpine` [(master:tags/alpine/Dockerfile)](https://github.com/grburst/docker-etesync-server/blob/stable/tags/alpine/Dockerfile)
+- `slim`  [(master:tags/slim/Dockerfile)](https://github.com/grburst/docker-etesync-server/blob/master/tags/slim/Dockerfile)
+- `alpine` [(master:tags/alpine/Dockerfile)](https://github.com/grburst/docker-etesync-server/blob/master/tags/alpine/Dockerfile)
 
 ## Usage
 
