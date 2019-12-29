@@ -63,6 +63,7 @@ This image exposes the **3735** TCP Port
 - **SUPER_EMAIL**: Email of the django superuser (optional, only used if no database is found);
 - **PUID** and **PGID**: set user and group when running using uwsgi, default: `1000`;
 - **ETESYNC_DB_PATH**: Location of the ETESync SQLite database. default: `/data` volume;
+- **DEBUG**: Show debug information in the web interface. *default*: "False"
 
 ## Settings and Customization
 
