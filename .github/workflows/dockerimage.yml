@@ -16,7 +16,7 @@ jobs:
       - name: Build + Publish Docker image
         uses: elgohr/Publish-Docker-Github-Action@2.11
         with:
-          name: GRBurst/etesync
+          name: grburst/etesync
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: Dockerfile
