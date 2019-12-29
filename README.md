@@ -6,14 +6,13 @@ Docker image for [ETESync](https://www.etesync.com/) based on the [server-skelet
 
 This build follows some tags of the Python official docker images:
 
-- `latest` [(stable:tags/latest/Dockerfile)](https://github.com/victor-rds/docker-etesync-server/blob/stable/tags/latest/Dockerfile)
-- `edge` [(master:tags/latest/Dockerfile)](https://github.com/victor-rds/docker-etesync-server/blob/master/tags/latest/Dockerfile)
-- `slim`  [(stable:tags/slim/Dockerfile)](https://github.com/victor-rds/docker-etesync-server/blob/stable/tags/slim/Dockerfile)
-- `alpine` [(stable:tags/debian/Dockerfile)](https://github.com/victor-rds/docker-etesync-server/blob/stable/tags/alpine/Dockerfile)
+- `edge` [(master:tags/latest/Dockerfile)](https://github.com/grburst/docker-etesync-server/blob/master/tags/latest/Dockerfile)
+- `slim`  [(master:tags/slim/Dockerfile)](https://github.com/grburst/docker-etesync-server/blob/stable/tags/slim/Dockerfile)
+- `alpine` [(master:tags/alpine/Dockerfile)](https://github.com/grburst/docker-etesync-server/blob/stable/tags/alpine/Dockerfile)
 
 ## Usage
 
-```docker run  -d -e SUPER_USER=admin -e SUPER_PASS=changeme -p 80:3735 -v /path/on/host:/data victorrds/etesync```
+```docker run  -d -e SUPER_USER=admin -e SUPER_PASS=changeme -p 80:3735 -v /path/on/host:/data grburst/etesync```
 
 Create a container running ETESync usiong http protocol.
 
