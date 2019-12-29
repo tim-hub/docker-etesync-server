@@ -29,8 +29,8 @@ services:
     container_name: etesync
     image: grburst/etesync:alpine
     restart: always
-    port:
-      - 80:3735
+    ports:
+      - "80:3735"
     volumes:
       - data-etesync:/data
     environment:
@@ -40,6 +40,34 @@ services:
 
 volumes:
   data-etesync:
+```
+
+In many cases, you run it several docker images behind a reverse proxy. Here is how I use it:
+```Dockerfile
+version: '3'
+
+services:
+  etesync:
+    container_name: etesync
+    image: grburst/etesync:alpine
+    restart: always
+    networks:
+      - my-reverse-proxy
+    expose:
+      - "3735"
+    volumes:
+      - data-etesync:/data
+    environment:
+      SERVER: ${SERVER:-uwsgi}
+      SUPER_USER: ${SUPER_USER:-admin}
+      SUPER_PASS: ${SUPER_PASS:-admin}
+
+volumes:
+  data-etesync:
+
+networks:
+  my-reverse-proxy:
+    external: true
 ```
 
 ## Volumes
