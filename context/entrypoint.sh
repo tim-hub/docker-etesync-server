@@ -6,13 +6,19 @@ if [ ! -z "$@" ]; then
     exec "$@"
 fi
 
+# Create secret file if not exist
+if [ -n "$SECRET_KEY" ] && [ ! -f "$BASE_DIR/secret.txt"]; then
+    echo "$SECRET_KEY" > ${SECRET_FILE:-$BASE_DIR/secret.txt}
+fi
+
+# first run
 if [ ! -e "$ETESYNC_DB_PATH" ]; then
-    # first run
-	echo 'Create Database'
+    # always create secret file on first run when key provided
     if [ -n "$SECRET_KEY" ]; then
         echo "$SECRET_KEY" > ${SECRET_FILE:-$BASE_DIR/secret.txt}
     fi
 
+	echo 'Create Database'
     $BASE_DIR/manage.py migrate
 	chown -R $PUID:$PGID "$DATA_DIR"
 	
