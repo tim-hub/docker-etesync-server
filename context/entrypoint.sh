@@ -38,8 +38,8 @@ fi
 
 if [ "$SERVER" = 'https' ] && { [ ! -f "$X509_CRT" ] || [ ! -f "$X509_KEY" ]; }; then
     echo "TLS is enabled, however neither the certificate nor the key were found!"
-    echo "The coorrect paths are '$X509_CRT' and '$X509_KEY'"
-    echo "Let's generate a selfsign certificate for localhost, but this isn't recommended"
+    echo "The correct paths are '$X509_CRT' and '$X509_KEY'"
+    echo "Let's generate a self-sign certificate for localhost, but this isn't recommended"
     openssl req -x509 -nodes -newkey rsa:2048 -keyout "$X509_KEY" -out "$X509_CRT" -days 365 -subj '/CN=localhost'
 fi
 
