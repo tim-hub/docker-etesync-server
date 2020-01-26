@@ -12,7 +12,7 @@ if [ -n "$SECRET_KEY" ] && [ ! -f "$BASE_DIR/secret.txt" ]; then
 fi
 
 # first run
-if [ ! -e "$ETESYNC_DB_PATH" ]; then
+if [ ! -e "$ETESYNC_DB_PATH" ] || [ -z "$ETESYNC_DB_PATH/db.sqlite3" ]; then
     # always create secret file on first run when key provided
     if [ -n "$SECRET_KEY" ]; then
         echo "$SECRET_KEY" > "${SECRET_FILE:-$BASE_DIR/secret.txt}"
@@ -39,7 +39,7 @@ fi
 if [ "$SERVER" = 'https' ] && { [ ! -f "$X509_CRT" ] || [ ! -f "$X509_KEY" ]; }; then
     echo "TLS is enabled, however neither the certificate nor the key were found!"
     echo "The correct paths are '$X509_CRT' and '$X509_KEY'"
-    echo "Let's generate a self-sign certificate for localhost, but this isn't recommended"
+    echo "Let's generate a selfsign certificate for localhost, but this isn't recommended"
     openssl req -x509 -nodes -newkey rsa:2048 -keyout "$X509_KEY" -out "$X509_CRT" -days 365 -subj '/CN=localhost'
 fi
 
